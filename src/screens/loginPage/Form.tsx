@@ -61,6 +61,7 @@ const initialValuesLogin: ILoginFormValue = {
 
 const Form = () => {
   const [pageType, setPageType] = useState<"register" | "login">("login");
+  const [pictureName,setPictureName] = useState("");
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ const Form = () => {
     for (value in values) {
       formData.append(value, values[value]);
     }
-
+    
     values.picture && formData.append("picturePath", values.picture.name || "");
 
     const savedUserResponse = await fetch(`${BASE_URL}/auth/register`, {
@@ -216,8 +217,10 @@ const Form = () => {
                         "image/.png": [".png"],
                       }}
                       multiple={false}
-                      onDrop={(acceptedFiles) =>
+                      onDrop={(acceptedFiles) =>{
                         setFieldValue("picture", acceptedFiles[0])
+                        setPictureName(acceptedFiles[0].name)
+                      }
                       }
                     >
                       {({ getRootProps, getInputProps }) => (
@@ -232,7 +235,7 @@ const Form = () => {
                             <p>Add Picture Here</p>
                           ) : (
                             <FlexBetween>
-                              <Typography>{values.picture?.name || ""}</Typography>  
+                              <Typography>{pictureName}</Typography>  
                               <EditOutlinedIcon />
                             </FlexBetween>
                           )}
