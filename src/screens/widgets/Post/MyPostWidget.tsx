@@ -23,10 +23,10 @@ import UserImage from "components/UserImage";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { IAppState, setPosts } from "state";
+import { IAppState, Post, setPosts } from "state";
 import { BASE_URL } from "utils";
 
-const MyPostWidget = ({ picturePath }: { picturePath: string }) => {
+const MyPostWidget = ({ picturePath,isProfilePage=false }: { picturePath: string,isProfilePage?: boolean }) => {
   const dispatch = useDispatch();
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState<File | null>(null);
@@ -55,8 +55,14 @@ const MyPostWidget = ({ picturePath }: { picturePath: string }) => {
       headers: { Authorization: `Bearer ${token}` },
       body: formData,
     });
-    const posts = await response.json();
-    dispatch(setPosts({ posts }));
+    const posts:Post[] = await response.json();
+    if(isProfilePage){
+      const filteredPosts = posts.filter(post=>post.userId===user._id)
+      dispatch(setPosts({posts:filteredPosts}))
+    }else{
+
+      dispatch(setPosts({ posts }));
+    }
     setImage(null);
     setPost("");
   };

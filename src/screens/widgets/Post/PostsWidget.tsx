@@ -47,11 +47,7 @@ const PostsWidget = (props: IPostsWidgetProps) => {
     } else {
       getAllPosts();
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  
-  useEffect(()=>{
-    getPostsByUserId(userId);
-  },[userId])
+  }, [userId]); // eslint-disable-line react-hooks/exhaustive-deps
    
 
   return (
